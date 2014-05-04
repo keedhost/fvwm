@@ -124,9 +124,11 @@ char *duplicate(const char *s)
 	int l;
 	char *r;
 
+	/* TA:  FIXME!  Use xasprintf() */
+
 	if (!s) return NULL;
 	l = strlen(s);
-	r = (char *) safemalloc (sizeof(char)*(l+1));
+	r = xmalloc (sizeof(char)*(l+1));
 	strncpy(r, s, l+1);
 
 	return r;
@@ -210,7 +212,7 @@ static void set_real_state_filename(char *filename)
 	{
 		free(real_state_filename);
 	}
-	real_state_filename = safestrdup(filename);
+	real_state_filename = xstrdup(filename);
 
 	return;
 }
@@ -247,7 +249,7 @@ static char *get_unique_state_filename(void)
 	{
 		return NULL;
 	}
-	filename = safestrdup(CatString2(path, "/.fs-XXXXXX"));
+	filename = xstrdup(CatString2(path, "/.fs-XXXXXX"));
 	fd = fvwm_mkstemp(filename);
 	if (fd == -1)
 	{
@@ -1334,8 +1336,8 @@ LoadWindowStates(char *filename)
 		{
 			sscanf(s, "%*s %lx", &w);
 			num_match++;
-			matches = (Match *)saferealloc(
-				(void *)matches, sizeof(Match) * num_match);
+			matches = xrealloc(
+				(void *)matches, sizeof(Match), num_match);
 			matches[num_match - 1].win = w;
 			matches[num_match - 1].client_id = NULL;
 			matches[num_match - 1].res_name = NULL;
@@ -1479,7 +1481,7 @@ LoadWindowStates(char *filename)
 			sscanf(s, "%*s %i%n",
 			       &matches[num_match - 1].wm_command_count, &pos);
 			matches[num_match - 1].wm_command = (char **)
-				safemalloc(
+				xmalloc(
 					matches[num_match - 1].
 					wm_command_count * sizeof (char *));
 			for (i = 0;
