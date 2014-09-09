@@ -70,6 +70,7 @@
 #include "fvwm.h"
 #include "externs.h"
 #include "cursor.h"
+#include "cmdparser.h"
 #include "functions.h"
 #include "commands.h"
 #include "bindings.h"
@@ -1692,7 +1693,7 @@ static Bool __handle_bpress_action(
 		/* release the pointer since it can't do harm over an icon */
 		XAllowEvents(dpy, AsyncPointer, CurrentTime);
 	}
-	execute_function(NULL, exc, action, 0);
+	execute_function(NULL, exc, action, NULL, 0);
 	if (exc->w.wcontext != C_WINDOW && exc->w.wcontext != C_NO_CONTEXT)
 	{
 		WaitForButtonsUp(True);
@@ -1731,7 +1732,7 @@ static void __handle_bpress_on_root(const exec_context_t *exc)
 
 		ecc.w.wcontext = C_ROOT;
 		exc2 = exc_clone_context(exc, &ecc, ECC_WCONTEXT);
-		execute_function(NULL, exc2, action, 0);
+		execute_function(NULL, exc2, action, NULL, 0);
 		exc_destroy_context(exc2);
 		WaitForButtonsUp(True);
 	}
@@ -1931,7 +1932,7 @@ void HandleClientMessage(const evh_args_t *ea)
 
 		ecc.w.wcontext = C_WINDOW;
 		exc = exc_clone_context(ea->exc, &ecc, ECC_WCONTEXT);
-		execute_function(NULL, exc, "Iconify", 0);
+		execute_function(NULL, exc, "Iconify", NULL, 0);
 		exc_destroy_context(exc);
 		return;
 	}
@@ -2279,7 +2280,7 @@ ENTER_DBG((stderr, "en: exit: found LeaveNotify\n"));
 		}
 		else if (edge_command)
 		{
-			execute_function(NULL, ea->exc, edge_command, 0);
+			execute_function(NULL, ea->exc, edge_command, NULL, 0);
 		}
 		else
 		{
@@ -2685,7 +2686,7 @@ void __handle_key(const evh_args_t *ea, Bool is_press)
 			exc = exc_clone_context(
 				ea->exc, &ecc, ECC_FW | ECC_WCONTEXT);
 		}
-		execute_function(NULL, exc, action, 0);
+		execute_function(NULL, exc, action, NULL, 0);
 		if (is_second_binding == False)
 		{
 			exc_destroy_context(exc);
@@ -2832,7 +2833,8 @@ ENTER_DBG((stderr, "ln: *** lgw = %p\n", fw));
 		}
 		else if (edge_command_leave)
 		{
-			execute_function(NULL, ea->exc, edge_command_leave, 0);
+			execute_function(
+				NULL, ea->exc, edge_command_leave, NULL, 0);
 		}
 	}
 
@@ -3259,7 +3261,8 @@ void HandleMapRequestKeepRaised(
 			{
 				execute_function_override_window(
 					NULL, ea->exc,
-					(char *)initial_map_command, 0, fw);
+					(char *)initial_map_command, NULL, 0,
+					fw);
 			}
 			MyXUngrabServer(dpy);
 			break;
@@ -3738,7 +3741,7 @@ ICON_DBG((stderr, "hpn: icon changed '%s'\n", fw->name.name));
 			ecc.w.wcontext = C_WINDOW;
 			exc = exc_clone_context(
 				ea->exc, &ecc, ECC_FW | ECC_WCONTEXT);
-			execute_function(NULL, exc, urgency_action, 0);
+			execute_function(NULL, exc, urgency_action, NULL, 0);
 			exc_destroy_context(exc);
 		}
 		break;
