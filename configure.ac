@@ -1800,6 +1800,7 @@ dnl
 	modules/FvwmDebug/FvwmDebug
 	modules/FvwmDebug/FvwmGtkDebug
 	modules/FvwmDragWell/Makefile
+    modules/FvwmDX/Makefile
 	modules/FvwmEvent/Makefile
 	modules/FvwmForm/Makefile
 	modules/FvwmIconBox/Makefile
