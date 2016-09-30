@@ -342,7 +342,7 @@ static int parse_command_args(
 {
 	/* It is impossible to guess the exact length because of expanding */
 #define MAX_TOTAL_ARG_LEN 256
-	/* char *arg_string = safemalloc(MAX_TOTAL_ARG_LEN); */
+	/* char *arg_string = xmalloc(MAX_TOTAL_ARG_LEN); */
 	static char arg_string[MAX_TOTAL_ARG_LEN];
 	int total_arg_len = 0;
 	int error_code = 0;

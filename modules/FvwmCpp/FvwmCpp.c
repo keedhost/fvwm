@@ -111,7 +111,7 @@ int main(int argc, char **argv)
   if (s != NULL)
     temp = s + 1;
 
-  MyName = safemalloc(strlen(temp)+2);
+  MyName = xmalloc(strlen(temp)+2);
   strcpy(MyName,"*");
   strcat(MyName, temp);
 
@@ -218,7 +218,7 @@ int main(int argc, char **argv)
     char *delete_file = tmp_file;
     if (tmp_file[0] != '/' && user_dir != NULL)
     {
-      delete_file = safestrdup(CatString3(user_dir, "/", tmp_file));
+      delete_file = xstrdup(CatString3(user_dir, "/", tmp_file));
     }
     delete_string = CatString3("Exec exec /bin/rm '", delete_file, "'");
     SendText(fd, delete_string, 0);
@@ -478,7 +478,7 @@ static char *MkDef(char *name, char *def)
   /* Get space to hold everything, if needed */
 
   n = EXTRA + strlen(name) + strlen(def);
-  cp = safemalloc(n);
+  cp = xmalloc(n);
 
   sprintf(cp, "#define %s %s\n",name,def);
 
